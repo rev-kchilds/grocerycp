@@ -1,0 +1,10 @@
+version: 0.2
+phases:
+  build:
+    commands:
+      - java -version
+      - mvn clean package
+artifacts:
+  files:
+    - 'Dockerfile'
+    - target/grocerylistapp-1.0-SNAPSHOT-jar-with-dependencies.jar
