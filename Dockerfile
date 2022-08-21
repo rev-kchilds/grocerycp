@@ -1,25 +1,8 @@
-# build stage
-FROM maven:3.6.0-jdk-11-slim AS build
-
-#copy the pom.xml on my current machine, and put in the image at the location /home/app/pom.xml
-COPY pom.xml /home/app/pom.xml
-
-#copy the src folder on my current machine, and put in the image at the location /home/app/src
-COPY src/ /home/app/src/
-
-RUN mvn -f /home/app/pom.xml clean package
-
-
-# run stage
-FROM openjdk:11-jre-slim
-
-COPY --from=build /home/app/target/grocerylistapp-1.0-SNAPSHOT-jar-with-dependencies.jar /home/app/app.jar
-
-# Open port for use
+# Declare the base image - here is a light weight JDK 8 environment setup
+FROM openjdk:8-jdk-alpine
+# Copy the jar produced from the mvn clean package phase from the target to the inside of the container
+COPY /target/grocerylistapp-1.0-SNAPSHOT-jar-with-dependencies.jar YourApp-0.0.1-SNAPSHOT.jar
+# Expose port 5000 of the container
 EXPOSE 9000
-
-ENTRYPOINT ["java", "-jar", "/home/app/app.jar"]
-
-
-
-
+# Run the JAR when you run the container, thus executing the app
+ENTRYPOINT ["java", "-jar", "/YourApp-0.0.1-SNAPSHOT.jar"]
